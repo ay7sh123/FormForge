@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div>
+      <h1>Your forms</h1>
+      <p class="sub">{{ forms|length }} form{{ '' if forms|length == 1 else 's' }}</p>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('forms.new_form') }}">New form</a>
+  </div>
+
+  {% if forms %}
+  <ul class="form-list" id="form-list">
+    {% for f in forms %}
+    {% set fid = f._id|string %}
+    {% set link = url_for('public.fill', public_id=f.public_id, _external=True) %}
+    <li class="form-row" data-id="{{ fid }}">
+      <div class="form-main">
+        <a class="form-title" href="{{ url_for('forms.edit_form', form_id=fid) }}">{{ f.title }}</a>
+        <p class="form-meta">
+          <span>{{ f.questions|length }} question{{ '' if f.questions|length == 1 else 's' }}</span>
+          <span>Created {{ f.created_at|datefmt }}</span>
+        </p>
+      </div>
+
+      <a class="form-stat" href="{{ url_for('forms.responses', form_id=fid) }}" title="View responses">
+        <strong data-count>{{ f.response_count }}</strong>
+        <span>response{{ '' if f.response_count == 1 else 's' }}</span>
+      </a>
+
+      <span class="badge {{ 'badge-open' if f.is_open else 'badge-closed' }}" data-status>{{ 'Accepting responses' if f.is_open else 'Closed' }}</span>
+
+      <div class="row-actions">
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('forms.responses', form_id=fid) }}">Responses</a>
+        <button class="btn btn-secondary btn-sm" type="button" data-copy="{{ link }}">Copy link</button>
+        <details class="menu">
+          <summary class="btn btn-ghost btn-sm" aria-label="More actions for {{ f.title }}">More</summary>
+          <div class="menu-list">
+            <a href="{{ url_for('forms.edit_form', form_id=fid) }}">Edit questions</a>
+            <a href="{{ link }}" target="_blank" rel="noopener">Open public form</a>
+            <button type="button" data-action="toggle-form" data-id="{{ fid }}">{{ 'Stop accepting responses' if f.is_open else 'Accept responses again' }}</button>
+            <button type="button" class="danger" data-action="delete-form" data-id="{{ fid }}" data-title="{{ f.title }}">Delete form</button>
+          </div>
+        </details>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty">
+    <h2>No forms yet</h2>
+    <p>Create a form, add a few questions and share the link. Responses will show up here.</p>
+    <a class="btn btn-primary" href="{{ url_for('forms.new_form') }}">Create your first form</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}

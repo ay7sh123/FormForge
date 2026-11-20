@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-narrow message-page">
+  <p class="message-code">{{ code }}</p>
+  <h1>{{ title }}</h1>
+  <p>{{ text }}</p>
+  <a class="btn btn-primary" href="{{ url_for('public.index') }}">Back to FormForge</a>
+</div>
+{% endblock %}

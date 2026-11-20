@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero container">
+  <div class="hero-copy">
+    <h1>Build a form in minutes. Collect answers with one link.</h1>
+    <p class="lede">FormForge lets you put together questions, share a public link, and read every response in a single table you can export.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Create your first form</a>
+      <a class="btn btn-secondary" href="{{ url_for('auth.login') }}">Log in</a>
+    </div>
+  </div>
+
+  <div class="hero-mock" aria-hidden="true">
+    <div class="mock-sheet">
+      <p class="mock-title">Workshop sign-up</p>
+      <div class="mock-q"><span>Full name</span><i></i></div>
+      <div class="mock-q"><span>Email</span><i></i></div>
+      <div class="mock-q mock-q-half"><span>Guests</span><i></i></div>
+      <div class="mock-q mock-q-half"><span>Preferred date</span><i></i></div>
+      <div class="mock-q"><span>Anything we should know?</span><i class="tall"></i></div>
+    </div>
+    <div class="mock-link">formforge.app/f/k3P9xQ2a</div>
+  </div>
+</section>
+
+<section class="container steps" aria-labelledby="how">
+  <h2 id="how">How it works</h2>
+  <ol>
+    <li>
+      <h3>Build</h3>
+      <p>Add short answer, paragraph, email, number and date questions. Mark the ones people must answer.</p>
+    </li>
+    <li>
+      <h3>Share</h3>
+      <p>Every form gets its own public link. Send it anywhere. Close the form whenever you have enough answers.</p>
+    </li>
+    <li>
+      <h3>Review</h3>
+      <p>Responses arrive in a table. Delete the ones you don't need or export everything as CSV.</p>
+    </li>
+  </ol>
+</section>
+
+<footer class="site-footer container">FormForge</footer>
+{% endblock %}

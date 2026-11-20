@@ -1,0 +1,25 @@
+{% extends "auth_layout.html" %}
+{% block auth_body %}
+<h1>Welcome back</h1>
+<p class="sub">Log in to see your forms and responses.</p>
+
+{% if error %}<div class="form-alert" role="alert">{{ error }}</div>{% endif %}
+
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" required autofocus value="{{ email }}">
+  </div>
+  <div class="field">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+  </div>
+
+  <button class="btn btn-primary btn-block" type="submit">Log in</button>
+</form>
+
+<p class="auth-switch">New to FormForge? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+{% endblock %}

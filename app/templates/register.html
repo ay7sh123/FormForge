@@ -1,0 +1,37 @@
+{% extends "auth_layout.html" %}
+{% block auth_body %}
+<h1>Create your account</h1>
+<p class="sub">Free to use. You'll be building your first form in a minute.</p>
+
+<form method="post" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="field {% if errors.name %}has-error{% endif %}">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" autocomplete="name" maxlength="80" required value="{{ values.name or '' }}" {% if errors.name %}aria-describedby="name-err" aria-invalid="true"{% endif %}>
+    {% if errors.name %}<p class="error-text" id="name-err">{{ errors.name }}</p>{% endif %}
+  </div>
+
+  <div class="field {% if errors.email %}has-error{% endif %}">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required value="{{ values.email or '' }}" {% if errors.email %}aria-describedby="email-err" aria-invalid="true"{% endif %}>
+    {% if errors.email %}<p class="error-text" id="email-err">{{ errors.email }}</p>{% endif %}
+  </div>
+
+  <div class="field {% if errors.password %}has-error{% endif %}">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required {% if errors.password %}aria-describedby="password-err" aria-invalid="true"{% endif %}>
+    {% if errors.password %}<p class="error-text" id="password-err">{{ errors.password }}</p>{% else %}<p class="hint">At least 8 characters.</p>{% endif %}
+  </div>
+
+  <div class="field {% if errors.confirm_password %}has-error{% endif %}">
+    <label for="confirm_password">Confirm password</label>
+    <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required {% if errors.confirm_password %}aria-describedby="confirm-err" aria-invalid="true"{% endif %}>
+    {% if errors.confirm_password %}<p class="error-text" id="confirm-err">{{ errors.confirm_password }}</p>{% endif %}
+  </div>
+
+  <button class="btn btn-primary btn-block" type="submit">Create account</button>
+</form>
+
+<p class="auth-switch">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+{% endblock %}

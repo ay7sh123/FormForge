@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block body_class %}page-builder{% endblock %}
+{% block content %}
+<div class="builder-bar">
+  <div class="builder-bar-inner">
+    <a class="back-link" href="{{ url_for('forms.dashboard') }}">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Your forms
+    </a>
+    <span id="save-status" class="save-status" data-state="saved">{{ 'All changes saved' if form.id else 'Not saved yet' }}</span>
+    {% if form.id %}<a class="btn btn-secondary btn-sm" id="responses-link" href="{{ url_for('forms.responses', form_id=form.id) }}">Responses</a>{% endif %}
+    <button class="btn btn-primary btn-sm" id="save-btn" type="button">Save form</button>
+  </div>
+</div>
+
+<div class="container-narrow builder" id="builder">
+  <section id="share-panel" class="share" hidden>
+    <label for="share-url">Public link</label>
+    <div class="share-row">
+      <input id="share-url" type="text" readonly>
+      <button class="btn btn-secondary btn-sm" type="button" data-copy-from="#share-url">Copy link</button>
+      <a class="btn btn-secondary btn-sm" id="share-open" href="#" target="_blank" rel="noopener">Open</a>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <label class="sr-only" for="form-title">Form title</label>
+    <input id="form-title" class="sheet-title" type="text" placeholder="Untitled form" maxlength="150" autocomplete="off">
+    <label class="sr-only" for="form-desc">Form description</label>
+    <textarea id="form-desc" class="sheet-desc" rows="2" placeholder="What is this form for? (optional)" maxlength="1000"></textarea>
+  </section>
+
+  <div id="questions" class="questions"></div>
+
+  <div class="add-bar" id="add-bar" role="group" aria-label="Add a question">
+    <span class="add-label">Add question</span>
+    <button type="button" class="chip" data-add="short_answer">Short answer</button>
+    <button type="button" class="chip" data-add="paragraph">Paragraph</button>
+    <button type="button" class="chip" data-add="email">Email</button>
+    <button type="button" class="chip" data-add="number">Number</button>
+    <button type="button" class="chip" data-add="date">Date</button>
+  </div>
+</div>
+
+<script type="application/json" id="form-data">{{ form|tojson }}</script>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for('static', filename='js/builder.js') }}"></script>{% endblock %}

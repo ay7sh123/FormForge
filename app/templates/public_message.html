@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block header %}{% endblock %}
+{% block body_class %}page-public{% endblock %}
+{% block content %}
+<div class="public-wrap">
+  <div class="public-sheet message-sheet">
+    <h1>{{ heading }}</h1>
+    <p>{{ message }}</p>
+    {% if again_url %}<a class="btn btn-secondary" href="{{ again_url }}">Submit another response</a>{% endif %}
+  </div>
+  <p class="powered">Made with <a href="{{ url_for('public.index') }}">FormForge</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+{% set fid = form._id|string %}
+{% set link = url_for('public.fill', public_id=form.public_id, _external=True) %}
+<div class="container">
+  <a class="back-link" href="{{ url_for('forms.dashboard') }}">
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Your forms
+  </a>
+
+  <div class="page-head">
+    <div>
+      <h1>{{ form.title }}</h1>
+      <p class="sub"><span><span id="response-count">{{ responses|length }}</span> response{{ '' if responses|length == 1 else 's' }}</span>
+        {% if not form.is_open %}<span class="badge badge-closed">Closed</span>{% endif %}</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn btn-secondary" href="{{ url_for('forms.edit_form', form_id=fid) }}">Edit form</a>
+      <a class="btn btn-primary {{ '' if responses else 'is-disabled' }}" href="{{ url_for('forms.export_csv', form_id=fid) }}" {% if not responses %}aria-disabled="true" tabindex="-1"{% endif %}>Export CSV</a>
+    </div>
+  </div>
+
+  <div id="table-area" data-form-id="{{ fid }}">
+  {% if responses %}
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Submitted</th>
+          {% for q in form.questions %}<th scope="col">{{ q.label }}</th>{% endfor %}
+          <th scope="col"><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in responses %}
+        <tr data-id="{{ r._id|string }}">
+          <td class="nowrap"><time data-local datetime="{{ r.submitted_at|iso }}">{{ r.submitted_at|datetimefmt }}</time></td>
+          {% for q in form.questions %}
+            {% set val = r.answers.get(q.id, '') %}
+            <td class="{{ 'long' if q.type == 'paragraph' else '' }}">{% if val == '' %}<span class="blank">No answer</span>{% else %}{{ val }}{% endif %}</td>
+          {% endfor %}
+          <td class="nowrap"><button class="btn btn-ghost btn-sm danger-text" type="button" data-action="delete-response" data-id="{{ r._id|string }}">Delete</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">
+    <h2>No responses yet</h2>
+    <p>Share the public link and answers will appear here as people submit them.</p>
+    <div class="share-row">
+      <input type="text" readonly value="{{ link }}" id="share-url" aria-label="Public link">
+      <button class="btn btn-primary btn-sm" type="button" data-copy-from="#share-url">Copy link</button>
+    </div>
+  </div>
+  {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for('static', filename='js/responses.js') }}"></script>{% endblock %}
